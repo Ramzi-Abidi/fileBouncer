@@ -27,6 +27,7 @@ export class FileSecurityEngine {
 
   async scan(input: RawInput, opts?: ScanOptions): Promise<ScanResult> {
     const startTime = Date.now();
+    const { timeoutMs, failFast } = this.config;
 
     let normalized;
     try {
@@ -75,8 +76,24 @@ export class FileSecurityEngine {
     const errors: ScanError[] = [];
     const scannersRun: string[] = [];
     const scannersSkipped: SkippedScanner[] = [];
+    let timedOut = false;
 
-    for (const scanner of this.scanners) {
+    for (let i = 0; i < this.scanners.length; i++) {
+      const scanner = this.scanners[i]!;
+
+      if (timeoutMs && Date.now() - startTime >= timeoutMs) {
+        timedOut = true;
+        for (let j = i; j < this.scanners.length; j++) {
+          scannersSkipped.push({ name: this.scanners[j]!.name, reason: "timeout" });
+        }
+        errors.push({
+          scanner: "engine",
+          code: "SCAN_TIMEOUT",
+          message: `Scan budget of ${String(timeoutMs)}ms exceeded`,
+        });
+        break;
+      }
+
       if (!scanner.appliesTo(ctx)) {
         scannersSkipped.push({ name: scanner.name, reason: "appliesTo returned false" });
         continue;
@@ -94,6 +111,13 @@ export class FileSecurityEngine {
           message: err instanceof Error ? err.message : "Unknown scanner error",
           cause: err,
         });
+      }
+
+      if (failFast && threats.some((t) => t.severity === "critical")) {
+        for (let j = i + 1; j < this.scanners.length; j++) {
+          scannersSkipped.push({ name: this.scanners[j]!.name, reason: "fail-fast" });
+        }
+        break;
       }
     }
 
@@ -114,6 +138,7 @@ export class FileSecurityEngine {
       scannersRun,
       scannersSkipped,
       durationMs: Date.now() - startTime,
+      timedOut,
     };
   }
 }

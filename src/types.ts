@@ -80,6 +80,8 @@ export interface ScanResult {
   scannersSkipped: SkippedScanner[];
   /** Total wall-clock time spent inside `engine.scan()`, in milliseconds. */
   durationMs: number;
+  /** `true` if the scan was cut short by `timeoutMs`. */
+  timedOut?: boolean;
 }
 
 /**
