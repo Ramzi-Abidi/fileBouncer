@@ -1,0 +1,13 @@
+node_modules
+dist
+coverage
+.DS_Store
+.idea
+.vscode/*
+!.vscode/extensions.json
+*.log
+.env
+.env.*
+!.env.example
+.tsbuildinfo
+.pnpm-store
