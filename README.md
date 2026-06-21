@@ -270,19 +270,6 @@ pnpm test
 
 ---
 
-## Contributing
-
-Contributions welcome. This project is split into **small, reviewable PRs** — one scanner or feature at a time.
-
-1. Fork the repo
-2. Create a branch: `git checkout -b feat/my-scanner`
-3. Run `pnpm typecheck && pnpm lint && pnpm test && pnpm build`
-4. Open a PR against `main`
-
-Please keep changes focused and readable. filebouncer favors **simple code over clever code**.
-
----
-
 ## License
 
 [MIT](LICENSE) © filebouncer contributors
