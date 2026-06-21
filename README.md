@@ -16,14 +16,12 @@
 
 **Early development** (`v0.0.0`). The scan engine is available; built-in scanners are coming next. Public API may change until `v1.0.0`.
 
-
 | Shipped today                                          | Coming soon                               |
 | ------------------------------------------------------ | ----------------------------------------- |
 | `FileSecurityEngine.scan()`                            | Built-in scanners (MIME, archive, CSV, …) |
 | Custom `Scanner` support                               | `scanners: "all"` wiring                  |
 | Input normalization (`Buffer`, streams, paths, `Blob`) | Express / Fastify middleware              |
 | Typed `ScanResult` / `Threat` model                    |                                           |
-
 
 ---
 
@@ -78,7 +76,6 @@ Detections are **returned as data**, not thrown -> your middleware decides wheth
 
 ## Why filebouncer
 
-
 | Approach                     | Problem                                                              |
 | ---------------------------- | -------------------------------------------------------------------- |
 | Extension / MIME header only | Trivial to spoof                                                     |
@@ -86,13 +83,11 @@ Detections are **returned as data**, not thrown -> your middleware decides wheth
 | ClamAV / antivirus           | Great for malware, **does not** catch MIME spoofing or CSV injection |
 | Heavy security platforms     | Overkill for many Node upload endpoints                              |
 
-
 filebouncer fills the gap: **lightweight, typed, Node-native structural checks** you drop into Express, Fastify, or any pipeline.
 
 ---
 
 ## What it detects
-
 
 | Threat                     | Description                                                 |
 | -------------------------- | ----------------------------------------------------------- |
@@ -102,7 +97,6 @@ filebouncer fills the gap: **lightweight, typed, Node-native structural checks**
 | **CSV injection**          | Cells starting with `=`, `+`, `-`, `@` (formula injection)  |
 | **Unsafe archive entries** | Absolute paths, symlinks, suspicious names                  |
 | **Metadata anomalies**     | Double extensions, executable extensions on “documents”     |
-
 
 ### What it does **not** detect
 
