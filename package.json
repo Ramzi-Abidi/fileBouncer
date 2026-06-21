@@ -3,6 +3,7 @@
   "version": "0.0.0",
   "description": "Lightweight file upload security layer for Node.js. Detects ZIP slip, ZIP bombs, MIME spoofing, CSV injection, and other structural file abuse.",
   "license": "MIT",
+  "packageManager": "pnpm@11.1.0",
   "type": "module",
   "engines": {
     "node": ">=20"
