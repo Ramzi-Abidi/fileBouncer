@@ -14,14 +14,15 @@
 
 ## Status
 
-**Early development** (`v0.0.0`). The scan engine is available; built-in scanners are coming next. Public API may change until `v1.0.0`.
+**Early development** (`v0.0.0`). The scan engine and MIME scanner are available; more built-in scanners are coming next. Public API may change until `v1.0.0`.
 
-| Shipped today                                          | Coming soon                               |
-| ------------------------------------------------------ | ----------------------------------------- |
-| `FileSecurityEngine.scan()`                            | Built-in scanners (MIME, archive, CSV, …) |
-| Custom `Scanner` support                               | `scanners: "all"` wiring                  |
-| Input normalization (`Buffer`, streams, paths, `Blob`) | Express / Fastify middleware              |
-| Typed `ScanResult` / `Threat` model                    |                                           |
+| Shipped today                                          | Coming soon                                |
+| ------------------------------------------------------ | ------------------------------------------ |
+| `FileSecurityEngine.scan()`                            | Built-in scanners (metadata, CSV, archive) |
+| MIME scanner (`scanners: ["mime"]`)                    | Express / Fastify middleware               |
+| Custom `Scanner` support                               |                                            |
+| Input normalization (`Buffer`, streams, paths, `Blob`) |                                            |
+| Typed `ScanResult` / `Threat` model                    |                                            |
 
 ---
 
@@ -33,6 +34,7 @@ See [Installation](#installation) to clone and build. Then:
 import { FileSecurityEngine } from "filebouncer";
 
 const engine = new FileSecurityEngine({
+  scanners: ["mime"],
   maxFileSize: 50 * 1024 * 1024,
 });
 
@@ -46,7 +48,7 @@ if (!result.ok) {
 }
 ```
 
-Built-in scanners are not shipped yet, so a typical file returns `ok: true` with an empty `threats` list until you add a custom scanner or a built-in scanner lands.
+Enable stricter MIME checks with `mime: { strict: true, allowList: [...] }` — see [Usage](#usage).
 
 One-off scan without creating an engine:
 
@@ -127,7 +129,12 @@ Pair filebouncer with ClamAV (or similar) if you need both **structural abuse** 
 import { FileSecurityEngine } from "filebouncer";
 
 const engine = new FileSecurityEngine({
+  scanners: ["mime"],
   maxFileSize: 10 * 1024 * 1024,
+  mime: {
+    strict: true,
+    allowList: ["image/jpeg", "image/png", "application/pdf"],
+  },
 });
 
 // Buffer upload (multer, etc.)
@@ -264,7 +271,8 @@ pnpm test
 - [x] Input normalization
 - [x] File signature detection (`detectType`)
 - [x] Scan engine (`FileSecurityEngine`)
-- [ ] Built-in scanners (MIME, metadata, CSV, archive, polyglot)
+- [x] MIME scanner
+- [ ] Built-in scanners (metadata, CSV, archive, polyglot)
 - [ ] Express & Fastify middleware
 - [ ] v1.0.0 on npm
 

@@ -102,6 +102,8 @@ export interface ScannerContext {
   filename?: string;
   declaredMime?: string;
   detectedMime?: string;
+  /** Lowercased extension from magic bytes, if detected. */
+  detectedExt?: string;
   /** Lowercased extension without leading dot, if derivable from `filename`. */
   extension?: string;
   /** Size of the input in bytes. */

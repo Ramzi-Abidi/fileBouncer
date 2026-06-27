@@ -26,3 +26,5 @@ export type { DetectedType } from "./util/detect-type";
 export { detectType } from "./util/detect-type";
 
 export { FileSecurityEngine, scanBuffer } from "./engine";
+
+export { MimeScanner } from "./scanners";
