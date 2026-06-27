@@ -1,3 +1,4 @@
+import { resolveBuiltInScanners } from "./built-ins";
 import { type RawInput, InputTooLargeError, normalizeInput } from "../input";
 import { detectType } from "../util/detect-type";
 import type {
@@ -18,7 +19,7 @@ export class FileSecurityEngine {
 
   constructor(config: EngineConfig = {}) {
     this.config = config;
-    this.scanners = [...(config.customScanners ?? [])];
+    this.scanners = [...resolveBuiltInScanners(config), ...(config.customScanners ?? [])];
   }
 
   use(scanner: Scanner) {
@@ -66,6 +67,7 @@ export class FileSecurityEngine {
       filename: normalized.filename,
       declaredMime: normalized.declaredMime,
       detectedMime: detected?.mime,
+      detectedExt: detected?.ext,
       extension: normalized.extension,
       size: normalized.size,
       read: () => normalized.read(),
