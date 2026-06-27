@@ -15,7 +15,7 @@ export class MimeScanner implements Scanner {
     return false;
   }
 
-  scan(ctx: ScannerContext){
+  scan(ctx: ScannerContext) {
     const threats: Threat[] = [];
 
     this.checkDenyList(ctx, threats);
